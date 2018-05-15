@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<body>
+
+    <div ng-app="myApp">
+        <div ng-controller="myCtrl">
+            <h1>Location service</h1>
+            <h3>{{myUrl}}</h3>
+        </div>
+
+        <div ng-controller="myCtrlHTTP">
+            <h1>HTTP service</h1>
+            <h1>{{myWelcome}}</h1>
+        </div>
+
+        <div ng-controller="timeoutCtrl">
+
+            <p>This header will change after two seconds:</p>
+
+            <h1>{{myHeader}}</h1>
+
+        </div>
+
+        <div ng-controller="severalCTRL">
+
+            <p>The time is:</p>
+
+            <h1>{{theTime}}</h1>
+
+        </div>
+
+        <div ng-controller="testService">
+            <p>Custom Service</p>
+            <h1>{{text}}</h1>
+        </div>
+
+
+    </div>
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope, $location) {
+            $scope.myUrl = $location.absUrl();
+        }).controller('myCtrlHTTP', function ($scope, $http) {
+            $http.get("text.htm").then(function (response) {
+                $scope.myWelcome = response.data;
+            });
+        }).controller('timeoutCtrl', function ($scope, $timeout) {
+            $scope.myHeader = "Hello World!";
+            $timeout(function () {
+                $scope.myHeader = "How are you today?";
+            }, 2000);
+        }).controller('severalCTRL', function ($scope, $interval) {
+            $scope.theTime = new Date().toLocaleTimeString();
+            $interval(function () {
+                $scope.theTime = new Date().toLocaleTimeString();
+            }, 1000);
+        }).controller('myCTRL', function ($scope, $interval) {
+            $scope.theTime = new Date().toLocaleTimeString();
+            $interval(function () {
+                $scope.theTime = new Date().toLocaleTimeString();
+            }, 1000);
+        }).service('myService', function() {
+            this.toMayus = function(x){
+                return x.toUpperCase();
+            }
+        }).controller('testService', function($scope, myService){
+            $scope.text = myService.toMayus("kenyo");
+        });
+    </script>
+
+</body>
+
+</html>
